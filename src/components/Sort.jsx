@@ -5,6 +5,7 @@ import { setSort } from '../redux/slices/filterSlice';
 function Sort() {
   const dispatch = useDispatch();
   const sort = useSelector((state) => state.filter.sort);
+  const sortRef = React.useRef();
 
   const sortCategory = [
     { name: 'популярности', sortProperty: 'rating' },
@@ -17,8 +18,17 @@ function Sort() {
   const onClickPopup = () => {
     setOpen(!open);
   };
+
+  React.useEffect(() => {
+    document.body.addEventListener('click', (e) => {
+      if (!e.composedPath().includes(sortRef.current)) {
+        setOpen(false);
+      }
+    });
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
