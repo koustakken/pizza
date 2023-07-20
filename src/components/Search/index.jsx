@@ -1,18 +1,20 @@
 import React from 'react';
-import { SearchContext } from '../../App';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchValue } from '../../redux/slices/searchSlice';
 
 import styles from './Search.module.scss';
 
 const Search = () => {
-  const { searchValue, setSearchValue } = React.useContext(SearchContext);
+  const dispatch = useDispatch();
+  const value = useSelector((state) => state.search.value);
 
   return (
     <div className={styles.root}>
       <input
         className={styles.input}
         placeholder="Поиск..."
-        onChange={(e) => setSearchValue(e.target.value)}
-        value={searchValue}
+        onChange={(e) => dispatch(setSearchValue(e.target.value))}
+        value={value}
       />
       <svg className={styles.icon} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <g data-name="Layer 2" id="Layer_2">

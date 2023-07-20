@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchContext } from '../App';
+import { useSelector } from 'react-redux';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -11,19 +11,19 @@ const Home = () => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const [categoryId, setCategoryId] = React.useState(0);
-  const [sortType, setSortType] = React.useState({ name: 'популярности', sortProperty: 'rating' });
+  //filters
+  const categoryId = useSelector((state) => state.filter.categoryId);
+  const sortType = useSelector((state) => state.filter.sort.sortProperty);
+  const searchValue = useSelector((state) => state.search.value);
 
   const [page, setPage] = React.useState(1);
-
-  const { searchValue } = React.useContext(SearchContext);
 
   React.useEffect(() => {
     setIsLoading(true);
     fetch(
       `https://64b529b0f3dbab5a95c6d400.mockapi.io/items?page=${page}&limit=4&${
         categoryId > 0 ? `category=${categoryId}` : ''
-      }&sortBy=${sortType.sortProperty}&order=desc`,
+      }&sortBy=${sortType}&order=desc`,
     )
       .then((res) => {
         return res.json();
@@ -38,8 +38,8 @@ const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories value={categoryId} onClickCategory={(i) => setCategoryId(i)} />
-        <Sort value={sortType} onClickSortType={(i) => setSortType(i)} />
+        <Categories />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
